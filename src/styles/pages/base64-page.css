@@ -1,0 +1,34 @@
+.base64-page {
+  grid-template-columns: 1fr;
+}
+
+.base64-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+}
+
+.base64-option input {
+  width: auto;
+}
+
+.base64-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.base64-file-info,
+.base64-size {
+  color: var(--muted);
+}
+
+.base64-message {
+  margin: 0;
+  color: var(--muted);
+}
+
+.base64-output textarea {
+  min-height: 14rem;
+}

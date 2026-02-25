@@ -1,0 +1,41 @@
+export const utilities = [
+  {
+    id: "file",
+    path: "/",
+    label: "Criar Arquivo",
+    description: "Monte e baixe evidencias em texto",
+    icon: "TXT"
+  },
+  {
+    id: "json",
+    path: "/json",
+    label: "JSON",
+    description: "Gerar, validar e formatar payloads",
+    icon: "{}"
+  },
+  {
+    id: "compare",
+    path: "/comparar-json",
+    label: "Comparar JSON",
+    description: "Encontrar mudancas entre respostas",
+    icon: "DIFF"
+  },
+  {
+    id: "compress",
+    path: "/comprimir",
+    label: "Comprimir",
+    description: "Reduzir tamanho de anexos e logs",
+    icon: "GZ"
+  },
+  {
+    id: "base64",
+    path: "/base64",
+    label: "Base64",
+    description: "Converter arquivos em texto Base64",
+    icon: "64"
+  }
+];
+
+export function getUtilityByPath(pathname) {
+  return utilities.find((item) => item.path === pathname) || utilities[0];
+}

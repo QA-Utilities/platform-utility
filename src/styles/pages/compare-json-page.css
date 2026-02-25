@@ -1,0 +1,29 @@
+.compare-json-page {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.compare-json-diff {
+  grid-column: 1 / -1;
+  background: var(--surface-2);
+  border-radius: 12px;
+  padding: 0.8rem;
+}
+
+.compare-json-diff ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.compare-json-error {
+  color: var(--danger);
+}
+
+.compare-json-success {
+  color: var(--success);
+}
+
+@media (max-width: 900px) {
+  .compare-json-page {
+    grid-template-columns: 1fr;
+  }
+}

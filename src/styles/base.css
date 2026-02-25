@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+:root {
+  --app-bg: #101114;
+  --sidebar-bg: #1a1b20;
+  --sidebar-panel: #23252d;
+  --sidebar-hover: #2d2f39;
+  --sidebar-border: #343743;
+  --sidebar-text: #e8eaf2;
+  --sidebar-muted: #9da3b6;
+  --sidebar-accent: #a28bff;
+  --content-bg: #0f172a;
+  --surface: rgba(248, 250, 252, 0.96);
+  --surface-2: #e2e8f0;
+  --accent: #0f766e;
+  --accent-dark: #115e59;
+  --text: #111827;
+  --muted: #475569;
+  --danger: #b91c1c;
+  --success: #166534;
+  --border: #cbd5e1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top right, #1f2937, var(--app-bg) 58%);
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.62rem 0.7rem;
+  background: #fff;
+}
+
+textarea {
+  resize: vertical;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.86rem;
+}
+
+button {
+  width: fit-content;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--accent-dark);
+}
+
+.card {
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+h2 {
+  margin: 0;
+}
