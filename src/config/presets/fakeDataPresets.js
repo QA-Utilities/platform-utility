@@ -21,6 +21,7 @@ export const PERSON_PRESETS = {
     lastNames: ["Ferreira", "Santos", "Rodrigues", "Pereira", "Costa", "Martins", "Oliveira"],
     streets: ["Rua de Santa Maria", "Avenida da Liberdade", "Rua do Comercio", "Rua do Carmo"],
     cities: ["Lisboa", "Porto", "Braga", "Coimbra", "Faro"],
+    states: ["Lisboa", "Porto", "Setubal", "Coimbra", "Faro"],
     domains: ["teste.pt", "emailqa.pt", "fakebox.pt"]
   },
   us: {
@@ -115,6 +116,7 @@ export const COMPANY_PRESETS = {
     suffixes: ["LDA", "S.A."],
     streets: ["Avenida da Liberdade", "Rua do Comercio", "Rua de Santa Catarina", "Rua do Carmo"],
     cities: ["Lisboa", "Porto", "Braga", "Coimbra", "Faro"],
+    states: ["Lisboa", "Porto", "Setubal", "Coimbra", "Faro"],
     domains: ["empresa.pt", "negocio.pt", "corp.pt"]
   },
   us: {
@@ -136,6 +138,8 @@ export const LABEL_OVERRIDES = {
   cep: "CEP",
   pais: "Pais",
   telefone: "Telefone",
+  cidade: "Cidade",
+  estado: "Estado",
   bandeira: "Bandeira",
   numero_cartao: "Numero do Cartao",
   validade: "Data de Validade",

@@ -1,0 +1,199 @@
+.string-page {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.string-block {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem;
+}
+
+.string-block h2 {
+  margin: 0;
+}
+
+.string-password-caption {
+  margin: 0;
+  color: var(--muted);
+}
+
+.string-pattern-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.string-pattern-button {
+  background: #334155;
+  border: 1px solid #334155;
+}
+
+.string-pattern-button:hover {
+  background: #1e293b;
+}
+
+.string-pattern-button.is-active {
+  background: #0f766e;
+  border-color: #0f766e;
+}
+
+.string-password-output {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem;
+}
+
+.string-password-output code {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.2rem;
+  color: #0f172a;
+  min-height: 1.8rem;
+}
+
+.string-password-output-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.string-icon-button {
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
+  border-radius: 10px;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.string-strength-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.string-strength-track {
+  flex: 1;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #cbd5e1;
+  overflow: hidden;
+}
+
+.string-strength-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 150ms ease;
+}
+
+.string-strength-fill.is-weak {
+  background: #dc2626;
+}
+
+.string-strength-fill.is-medium {
+  background: #ca8a04;
+}
+
+.string-strength-fill.is-strong {
+  background: #166534;
+}
+
+.string-strength-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.string-strength-label.is-weak {
+  color: #991b1b;
+}
+
+.string-strength-label.is-medium {
+  color: #a16207;
+}
+
+.string-strength-label.is-strong {
+  color: #166534;
+}
+
+.string-password-controls {
+  display: grid;
+  gap: 0.65rem;
+  background: #e6f4ea;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 0.7rem;
+}
+
+.string-range-label {
+  color: #1f2937;
+}
+
+.string-char-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1rem;
+}
+
+.string-message {
+  margin: 0;
+  color: var(--muted);
+}
+
+.string-stats {
+  display: grid;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+.string-stats p {
+  margin: 0;
+  color: #334155;
+  font-size: 0.92rem;
+}
+
+.string-occurrence {
+  grid-column: 1 / -1;
+}
+
+.string-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+}
+
+.string-checkbox input {
+  width: auto;
+}
+
+.string-occurrence-result {
+  margin: 0;
+  color: #334155;
+}
+
+@media (max-width: 900px) {
+  .string-page {
+    grid-template-columns: 1fr;
+  }
+
+  .string-occurrence {
+    grid-column: auto;
+  }
+
+  .string-password-output {
+    display: grid;
+  }
+}

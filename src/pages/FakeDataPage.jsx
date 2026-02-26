@@ -143,16 +143,19 @@ function buildPerson(country) {
   const fullName = `${firstName} ${middleLast} ${lastName}`;
   const emailBase = normalizeNameForEmail(fullName);
   const email = `${emailBase}${randomInt(10, 99)}@${randomItem(preset.domains)}`;
+  const city = randomItem(preset.cities);
+  const state = preset.states ? randomItem(preset.states) : city;
 
   if (country === "br") {
     const cep = `${randomDigits(5)}-${randomDigits(3)}`;
     const ddd = randomInt(11, 99);
+    const district = randomItem(preset.districts);
     return {
       nome_completo: fullName,
       email,
-      endereco: `${randomItem(preset.streets)}, ${randomInt(10, 9999)} - ${randomItem(preset.districts)}, ${randomItem(
-        preset.cities
-      )}/${randomItem(preset.states)}`,
+      endereco: `${randomItem(preset.streets)}, ${randomInt(10, 9999)} - ${district}, ${city}/${state}`,
+      cidade: city,
+      estado: state,
       cep,
       pais: preset.label,
       telefone: `+55 (${ddd}) 9${randomDigits(4)}-${randomDigits(4)}`,
@@ -169,7 +172,9 @@ function buildPerson(country) {
     return {
       nome_completo: fullName,
       email,
-      endereco: `${randomItem(preset.streets)}, ${randomInt(1, 300)}, ${cep} ${randomItem(preset.cities)}`,
+      endereco: `${randomItem(preset.streets)}, ${randomInt(1, 300)}, ${cep} ${city}, ${state}`,
+      cidade: city,
+      estado: state,
       cep,
       pais: preset.label,
       telefone: `+351 9${randomDigits(2)} ${randomDigits(3)} ${randomDigits(3)}`,
@@ -182,11 +187,12 @@ function buildPerson(country) {
   }
 
   const cep = randomDigits(5);
-  const state = randomItem(preset.states);
   return {
     nome_completo: fullName,
     email,
-    endereco: `${randomInt(10, 9999)} ${randomItem(preset.streets)}, ${randomItem(preset.cities)}, ${state} ${cep}`,
+    endereco: `${randomInt(10, 9999)} ${randomItem(preset.streets)}, ${city}, ${state} ${cep}`,
+    cidade: city,
+    estado: state,
     cep,
     pais: preset.label,
     telefone: `+1 (${randomDigits(3)}) ${randomDigits(3)}-${randomDigits(4)}`,
@@ -391,16 +397,19 @@ function buildCompany(country) {
   const email = `${emailToken || "empresa"}${randomInt(10, 99)}@${randomItem(preset.domains)}`;
   const foundationDate = randomDateFromYearRange(1975, 2020);
   const openingDate = addMonths(foundationDate, randomInt(1, 24));
+  const city = randomItem(preset.cities);
+  const state = preset.states ? randomItem(preset.states) : city;
 
   if (country === "br") {
-    const state = randomItem(preset.states);
     return {
       pais: preset.label,
       nome_empresa: companyName,
       cnpj: buildBrazilCnpj(),
       tipo_documento_empresa: "CNPJ",
       data_fundacao: formatDateIso(foundationDate),
-      localizacao: `${randomItem(preset.streets)}, ${randomInt(10, 9999)} - ${randomItem(preset.cities)}/${state}, Brasil`,
+      localizacao: `${randomItem(preset.streets)}, ${randomInt(10, 9999)} - ${city}/${state}, Brasil`,
+      cidade: city,
+      estado: state,
       data_abertura: formatDateIso(openingDate),
       inscricao_estadual: buildBrazilStateRegistration(),
       tipo_inscricao_estadual: "Inscricao Estadual",
@@ -417,7 +426,9 @@ function buildCompany(country) {
       data_fundacao: formatDateIso(foundationDate),
       localizacao: `${randomItem(preset.streets)}, ${randomInt(1, 300)}, ${randomDigits(4)}-${randomDigits(
         3
-      )} ${randomItem(preset.cities)}, Portugal`,
+      )} ${city}, ${state}, Portugal`,
+      cidade: city,
+      estado: state,
       data_abertura: formatDateIso(openingDate),
       inscricao_estadual: buildPortugalCommercialRegistration(),
       tipo_inscricao_estadual: "Registo Comercial",
@@ -425,16 +436,15 @@ function buildCompany(country) {
     };
   }
 
-  const state = randomItem(preset.states);
   return {
     pais: preset.label,
     nome_empresa: companyName,
     cnpj: buildUsEin(),
     tipo_documento_empresa: "EIN (equivalente ao CNPJ)",
     data_fundacao: formatDateIso(foundationDate),
-    localizacao: `${randomInt(10, 9999)} ${randomItem(preset.streets)}, ${randomItem(
-      preset.cities
-    )}, ${state} ${randomDigits(5)}, USA`,
+    localizacao: `${randomInt(10, 9999)} ${randomItem(preset.streets)}, ${city}, ${state} ${randomDigits(5)}, USA`,
+    cidade: city,
+    estado: state,
     data_abertura: formatDateIso(openingDate),
     inscricao_estadual: buildUsStateTaxId(state),
     tipo_inscricao_estadual: "State Tax ID",

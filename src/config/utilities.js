@@ -47,6 +47,20 @@ export const utilities = [
     label: "QR Code",
     description: "Gerar QR Code aleatorio para testes",
     icon: "QR"
+  },
+  {
+    id: "string",
+    path: "/string",
+    label: "String",
+    description: "Gerar senha e contadores de texto",
+    icon: "STR"
+  },
+  {
+    id: "color-picker",
+    path: "/color-picker",
+    label: "Color Picker",
+    description: "Converter entre RGB, HEX, HSL, HSV e CMYK",
+    icon: "CLR"
   }
 ];
 
