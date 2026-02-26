@@ -86,6 +86,15 @@
   align-content: start;
 }
 
+.sidebar-empty {
+  margin: 0.3rem 0 0;
+  padding: 0.5rem 0.62rem;
+  border: 1px dashed #404452;
+  border-radius: 10px;
+  color: #9da3b6;
+  font-size: 0.82rem;
+}
+
 .utility-link {
   border: 1px solid transparent;
   color: var(--sidebar-muted);

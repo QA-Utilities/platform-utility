@@ -40,6 +40,13 @@ export const utilities = [
     label: "Base64",
     description: "Converter arquivos em texto Base64",
     icon: "64"
+  },
+  {
+    id: "qrcode",
+    path: "/qrcode",
+    label: "QR Code",
+    description: "Gerar QR Code aleatorio para testes",
+    icon: "QR"
   }
 ];
 

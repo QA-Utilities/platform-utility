@@ -5,6 +5,7 @@ import CompressPage from "../pages/CompressPage";
 import FakeDataPage from "../pages/FakeDataPage";
 import FileToolPage from "../pages/FileToolPage";
 import JsonToolPage from "../pages/JsonToolPage";
+import QrCodePage from "../pages/QrCodePage";
 
 export default function AppRouter() {
   return (
@@ -14,6 +15,7 @@ export default function AppRouter() {
       <Route path="/comparar-valor" element={<CompareJsonPage />} />
       <Route path="/comprimir" element={<CompressPage />} />
       <Route path="/base64" element={<Base64Page />} />
+      <Route path="/qrcode" element={<QrCodePage />} />
       <Route path="/dados-fake" element={<FakeDataPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
