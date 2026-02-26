@@ -29,6 +29,21 @@
   color: var(--muted);
 }
 
+.base64-output {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.base64-output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  flex-wrap: wrap;
+}
+
 .base64-output textarea {
   min-height: 14rem;
 }

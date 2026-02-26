@@ -3,7 +3,7 @@ export const utilities = [
     id: "file",
     path: "/",
     label: "Criar Arquivo",
-    description: "Monte e baixe evidencias em texto",
+    description: "Gerar arquivos de teste em texto, PDF e imagem",
     icon: "TXT"
   },
   {

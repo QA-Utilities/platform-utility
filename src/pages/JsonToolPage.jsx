@@ -16,6 +16,7 @@ export default function JsonToolPage() {
   ]);
   const [jsonRaw, setJsonRaw] = useState('{"hello":"world"}');
   const [jsonOutput, setJsonOutput] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
 
   const addPair = () => setPairs((current) => [...current, { key: "", value: "" }]);
 
@@ -40,15 +41,37 @@ export default function JsonToolPage() {
       obj[key] = pair.value;
     });
     setJsonOutput(JSON.stringify(obj, null, 2));
+    setStatusMessage("JSON gerado com sucesso.");
   };
 
   const formatRawJson = () => {
     const parsed = tryParseJson(jsonRaw);
     if (!parsed.ok) {
       setJsonOutput(`Erro: ${parsed.error}`);
+      setStatusMessage("Falha ao formatar JSON.");
       return;
     }
     setJsonOutput(JSON.stringify(parsed.data, null, 2));
+    setStatusMessage("JSON formatado com sucesso.");
+  };
+
+  const copyJsonOutput = async () => {
+    if (!jsonOutput) {
+      setStatusMessage("Nenhum resultado JSON para copiar.");
+      return;
+    }
+
+    if (!navigator.clipboard) {
+      setStatusMessage("Clipboard indisponivel neste navegador.");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(jsonOutput);
+      setStatusMessage("Resultado JSON copiado.");
+    } catch {
+      setStatusMessage("Nao foi possivel copiar o JSON.");
+    }
   };
 
   return (
@@ -58,12 +81,12 @@ export default function JsonToolPage() {
         {pairs.map((pair, index) => (
           <div className="json-tool-row" key={`${pair.key}-${index}`}>
             <input
-              placeholder="chave"
+              placeholder="Chave"
               value={pair.key}
               onChange={(e) => updatePair(index, "key", e.target.value)}
             />
             <input
-              placeholder="valor"
+              placeholder="Valor"
               value={pair.value}
               onChange={(e) => updatePair(index, "value", e.target.value)}
             />
@@ -95,10 +118,17 @@ export default function JsonToolPage() {
         </button>
       </div>
 
-      <label className="json-tool-output">
-        Resultado
-        <textarea rows={12} value={jsonOutput} readOnly />
-      </label>
+      <div className="json-tool-output">
+        <div className="json-tool-output-header">
+          <span>Resultado JSON</span>
+          <button type="button" onClick={copyJsonOutput} disabled={!jsonOutput}>
+            Copiar JSON
+          </button>
+        </div>
+        <textarea placeholder="O resultado da acao saira aqui" rows={12} value={jsonOutput} readOnly />
+      </div>
+
+      {statusMessage && <p className="json-tool-message">{statusMessage}</p>}
     </section>
   );
 }

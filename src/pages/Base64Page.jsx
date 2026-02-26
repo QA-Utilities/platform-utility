@@ -106,9 +106,6 @@ export default function Base64Page() {
         <button type="button" onClick={convertToBase64}>
           Converter para Base64
         </button>
-        <button type="button" onClick={copyBase64} disabled={!base64Output}>
-          Copiar Base64
-        </button>
         <button type="button" onClick={downloadBase64} disabled={!base64Output}>
           Baixar .txt
         </button>
@@ -120,10 +117,15 @@ export default function Base64Page() {
       )}
       {statusMessage && <p className="base64-message">{statusMessage}</p>}
 
-      <label className="base64-output">
-        Resultado Base64
+      <div className="base64-output">
+        <div className="base64-output-header">
+          <span>Resultado Base64</span>
+          <button type="button" onClick={copyBase64} disabled={!base64Output}>
+            Copiar Base64
+          </button>
+        </div>
         <textarea rows={12} readOnly value={base64Output} />
-      </label>
+      </div>
     </section>
   );
 }

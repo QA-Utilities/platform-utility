@@ -1,3 +1,53 @@
 .file-tool-page {
   grid-template-columns: 1fr;
 }
+
+.file-tool-page select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.62rem 0.7rem;
+  background: #fff;
+}
+
+.file-size-controls {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: #f8fafc;
+}
+
+.file-size-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--muted);
+}
+
+.file-size-toggle input {
+  width: auto;
+}
+
+.file-tool-page textarea:disabled {
+  background: #e2e8f0;
+  color: #475569;
+  cursor: not-allowed;
+}
+
+.file-tool-caption {
+  margin: 0;
+  color: var(--muted);
+}
+
+.file-tool-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.file-tool-message {
+  margin: 0;
+  color: var(--muted);
+}
