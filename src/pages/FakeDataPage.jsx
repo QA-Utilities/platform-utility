@@ -11,6 +11,12 @@ import "../styles/pages/fake-data-page.css";
 const VIN_CHARS = "ABCDEFGHJKLMNPRSTUVWXYZ0123456789";
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const ALPHA_NUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const GENERATOR_OPTIONS = [
+  { value: "person", label: "Criar pessoa" },
+  { value: "card", label: "Criar cartao de credito" },
+  { value: "company", label: "Criar empresa" },
+  { value: "vehicle", label: "Criar veiculo por pais" }
+];
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -523,6 +529,8 @@ async function copyFieldValue(field, notify) {
 }
 
 export default function FakeDataPage() {
+  const [generatorPicker, setGeneratorPicker] = useState("");
+  const [activeGenerators, setActiveGenerators] = useState([]);
   const [personCountry, setPersonCountry] = useState("br");
   const [personOutput, setPersonOutput] = useState(null);
 
@@ -588,188 +596,256 @@ export default function FakeDataPage() {
     showToast(`Veiculo fake gerado para ${VEHICLE_PRESETS[vehicleCountry].label}.`);
   };
 
+  const handleGeneratorAdd = (event) => {
+    const nextType = event.target.value;
+    setGeneratorPicker("");
+    if (!nextType) return;
+
+    setActiveGenerators((current) => {
+      if (current.includes(nextType)) return current;
+      return [...current, nextType];
+    });
+  };
+
+  const removeGenerator = (generatorKey) => {
+    setActiveGenerators((current) => current.filter((item) => item !== generatorKey));
+  };
+
+  const clearGenerators = () => {
+    setActiveGenerators([]);
+  };
+
   return (
     <section className="card fake-data-page">
       <h2>Gerador de dados fakes</h2>
       <p className="fake-data-intro">
         Gere dados ficticios para testes de cadastro, pagamentos e identificadores de veiculos.
       </p>
+
+      <div className="fake-data-generator-controls">
+        <label className="fake-data-generator-select">
+          Tipo de criacao
+          <select value={generatorPicker} onChange={handleGeneratorAdd}>
+            <option value="">Selecione um tipo</option>
+            {GENERATOR_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value} disabled={activeGenerators.includes(option.value)}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <p className="fake-data-generator-hint">Escolha um tipo e ele sera adicionado automaticamente.</p>
+
+      {activeGenerators.length > 0 && (
+        <div className="fake-data-selected-list">
+          {activeGenerators.map((generatorKey) => {
+            const label = GENERATOR_OPTIONS.find((option) => option.value === generatorKey)?.label || generatorKey;
+            return (
+              <span className="fake-data-selected-item" key={generatorKey}>
+                {label}
+                <button type="button" onClick={() => removeGenerator(generatorKey)}>
+                  Remover
+                </button>
+              </span>
+            );
+          })}
+          <button type="button" className="fake-data-clear-button" onClick={clearGenerators}>
+            Limpar todos
+          </button>
+        </div>
+      )}
+
       {toastMessage && (
         <div className="fake-data-toast" role="status" aria-live="polite">
           {toastMessage}
         </div>
       )}
 
-      <div className="fake-data-grid">
-        <article className="fake-data-block">
-          <h3>Criar pessoa</h3>
-          <label>
-            Pais
-            <select value={personCountry} onChange={(event) => setPersonCountry(event.target.value)}>
-              {Object.entries(PERSON_PRESETS).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value.label}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <p className="fake-data-tip">
-            Identificadores: Brasil (CPF, RG e CNH), Portugal (NIF, NISS e Cartao de Cidadao), EUA (SSN e Driver
-            License).
+      <div className={`fake-data-grid${activeGenerators.length === 1 ? " fake-data-grid-single" : ""}`}>
+        {activeGenerators.length === 0 && (
+          <p className="fake-data-select-hint">
+            Selecione um tipo de criacao acima para exibir o menu correspondente.
           </p>
+        )}
 
-          <div className="fake-data-actions">
-            <button type="button" onClick={generatePerson}>
-              Gerar pessoa
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                copyToClipboard(
-                  personOutput ? JSON.stringify(personOutput, null, 2) : "",
-                  showToast,
-                  "Gere uma pessoa primeiro.",
-                  "JSON de pessoa copiado."
-                )
-              }
-              disabled={!personOutput}
-            >
-              Copiar JSON
-            </button>
-          </div>
-          <DataFields
-            fields={personFields}
-            emptyMessage="Gere uma pessoa para ver os campos separados."
-            onFieldCopy={(field) => copyFieldValue(field, showToast)}
-          />
-        </article>
+        {activeGenerators.includes("person") && (
+          <article className="fake-data-block">
+            <h3>Criar pessoa</h3>
+            <label>
+              Pais
+              <select value={personCountry} onChange={(event) => setPersonCountry(event.target.value)}>
+                {Object.entries(PERSON_PRESETS).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value.label}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-        <article className="fake-data-block">
-          <h3>Criar cartao de credito</h3>
-          <label>
-            Bandeira
-            <select value={cardBrand} onChange={(event) => setCardBrand(event.target.value)}>
-              {Object.entries(CARD_BRANDS).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value.label}
-                </option>
-              ))}
-            </select>
-          </label>
+            <p className="fake-data-tip">
+              Identificadores: Brasil (CPF, RG e CNH), Portugal (NIF, NISS e Cartao de Cidadao), EUA (SSN e Driver
+              License).
+            </p>
 
-          <div className="fake-data-actions">
-            <button type="button" onClick={generateCard}>
-              Gerar cartao
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                copyToClipboard(
-                  cardOutput ? JSON.stringify(cardOutput, null, 2) : "",
-                  showToast,
-                  "Gere um cartao primeiro.",
-                  "JSON do cartao copiado."
-                )
-              }
-              disabled={!cardOutput}
-            >
-              Copiar JSON
-            </button>
-          </div>
-          <DataFields
-            fields={cardFields}
-            emptyMessage="Gere um cartao para ver os campos separados."
-            onFieldCopy={(field) => copyFieldValue(field, showToast)}
-          />
-        </article>
+            <div className="fake-data-actions">
+              <button type="button" onClick={generatePerson}>
+                Gerar pessoa
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  copyToClipboard(
+                    personOutput ? JSON.stringify(personOutput, null, 2) : "",
+                    showToast,
+                    "Gere uma pessoa primeiro.",
+                    "JSON de pessoa copiado."
+                  )
+                }
+                disabled={!personOutput}
+              >
+                Copiar JSON
+              </button>
+            </div>
+            <DataFields
+              fields={personFields}
+              emptyMessage="Gere uma pessoa para ver os campos separados."
+              onFieldCopy={(field) => copyFieldValue(field, showToast)}
+            />
+          </article>
+        )}
 
-        <article className="fake-data-block">
-          <h3>Criar veiculo por pais</h3>
-          <label>
-            Pais
-            <select value={vehicleCountry} onChange={(event) => setVehicleCountry(event.target.value)}>
-              {Object.entries(VEHICLE_PRESETS).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value.label}
-                </option>
-              ))}
-            </select>
-          </label>
+        {activeGenerators.includes("card") && (
+          <article className="fake-data-block">
+            <h3>Criar cartao de credito</h3>
+            <label>
+              Bandeira
+              <select value={cardBrand} onChange={(event) => setCardBrand(event.target.value)}>
+                {Object.entries(CARD_BRANDS).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value.label}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-          <p className="fake-data-tip">
-            Identificadores: Brasil (placa + renavam), Portugal (matricula + vin) e EUA (license plate + vin).
-          </p>
+            <div className="fake-data-actions">
+              <button type="button" onClick={generateCard}>
+                Gerar cartao
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  copyToClipboard(
+                    cardOutput ? JSON.stringify(cardOutput, null, 2) : "",
+                    showToast,
+                    "Gere um cartao primeiro.",
+                    "JSON do cartao copiado."
+                  )
+                }
+                disabled={!cardOutput}
+              >
+                Copiar JSON
+              </button>
+            </div>
+            <DataFields
+              fields={cardFields}
+              emptyMessage="Gere um cartao para ver os campos separados."
+              onFieldCopy={(field) => copyFieldValue(field, showToast)}
+            />
+          </article>
+        )}
 
-          <div className="fake-data-actions">
-            <button type="button" onClick={generateVehicle}>
-              Gerar veiculo
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                copyToClipboard(
-                  vehicleOutput ? JSON.stringify(vehicleOutput, null, 2) : "",
-                  showToast,
-                  "Gere um veiculo primeiro.",
-                  "JSON do veiculo copiado."
-                )
-              }
-              disabled={!vehicleOutput}
-            >
-              Copiar JSON
-            </button>
-          </div>
-          <DataFields
-            fields={vehicleFields}
-            emptyMessage="Gere um veiculo para ver os campos separados."
-            onFieldCopy={(field) => copyFieldValue(field, showToast)}
-          />
-        </article>
+        {activeGenerators.includes("company") && (
+          <article className="fake-data-block">
+            <h3>Criar empresa</h3>
+            <label>
+              Pais
+              <select value={companyCountry} onChange={(event) => setCompanyCountry(event.target.value)}>
+                {Object.entries(COMPANY_PRESETS).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value.label}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-        <article className="fake-data-block">
-          <h3>Criar empresa</h3>
-          <label>
-            Pais
-            <select value={companyCountry} onChange={(event) => setCompanyCountry(event.target.value)}>
-              {Object.entries(COMPANY_PRESETS).map(([key, value]) => (
-                <option key={key} value={key}>
-                  {value.label}
-                </option>
-              ))}
-            </select>
-          </label>
+            <p className="fake-data-tip">
+              CNPJ e inscricao estadual sao convertidos para equivalentes locais: NIPC/Registo Comercial (Portugal) e
+              EIN/State Tax ID (EUA).
+            </p>
 
-          <p className="fake-data-tip">
-            CNPJ e inscricao estadual sao convertidos para equivalentes locais: NIPC/Registo Comercial (Portugal) e
-            EIN/State Tax ID (EUA).
-          </p>
+            <div className="fake-data-actions">
+              <button type="button" onClick={generateCompany}>
+                Gerar empresa
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  copyToClipboard(
+                    companyOutput ? JSON.stringify(companyOutput, null, 2) : "",
+                    showToast,
+                    "Gere uma empresa primeiro.",
+                    "JSON da empresa copiado."
+                  )
+                }
+                disabled={!companyOutput}
+              >
+                Copiar JSON
+              </button>
+            </div>
+            <DataFields
+              fields={companyFields}
+              emptyMessage="Gere uma empresa para ver os campos separados."
+              onFieldCopy={(field) => copyFieldValue(field, showToast)}
+            />
+          </article>
+        )}
 
-          <div className="fake-data-actions">
-            <button type="button" onClick={generateCompany}>
-              Gerar empresa
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                copyToClipboard(
-                  companyOutput ? JSON.stringify(companyOutput, null, 2) : "",
-                  showToast,
-                  "Gere uma empresa primeiro.",
-                  "JSON da empresa copiado."
-                )
-              }
-              disabled={!companyOutput}
-            >
-              Copiar JSON
-            </button>
-          </div>
-          <DataFields
-            fields={companyFields}
-            emptyMessage="Gere uma empresa para ver os campos separados."
-            onFieldCopy={(field) => copyFieldValue(field, showToast)}
-          />
-        </article>
+        {activeGenerators.includes("vehicle") && (
+          <article className="fake-data-block">
+            <h3>Criar veiculo por pais</h3>
+            <label>
+              Pais
+              <select value={vehicleCountry} onChange={(event) => setVehicleCountry(event.target.value)}>
+                {Object.entries(VEHICLE_PRESETS).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <p className="fake-data-tip">
+              Identificadores: Brasil (placa + renavam), Portugal (matricula + vin) e EUA (license plate + vin).
+            </p>
+
+            <div className="fake-data-actions">
+              <button type="button" onClick={generateVehicle}>
+                Gerar veiculo
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  copyToClipboard(
+                    vehicleOutput ? JSON.stringify(vehicleOutput, null, 2) : "",
+                    showToast,
+                    "Gere um veiculo primeiro.",
+                    "JSON do veiculo copiado."
+                  )
+                }
+                disabled={!vehicleOutput}
+              >
+                Copiar JSON
+              </button>
+            </div>
+            <DataFields
+              fields={vehicleFields}
+              emptyMessage="Gere um veiculo para ver os campos separados."
+              onFieldCopy={(field) => copyFieldValue(field, showToast)}
+            />
+          </article>
+        )}
       </div>
     </section>
   );

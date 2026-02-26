@@ -22,8 +22,8 @@ export const utilities = [
   },
   {
     id: "compare",
-    path: "/comparar-json",
-    label: "Comparar JSON",
+    path: "/comparar-valor",
+    label: "Comparar Valores",
     description: "Encontrar mudancas entre respostas",
     icon: "DIFF"
   },

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import "../styles/pages/json-tool-page.css";
 
 function tryParseJson(value) {
@@ -7,6 +7,97 @@ function tryParseJson(value) {
   } catch (error) {
     return { ok: false, error: error.message };
   }
+}
+
+function escapeHtml(value) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function highlightJson(source) {
+  const tokenPattern = /"(?:\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*"|\btrue\b|\bfalse\b|\bnull\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|[{}[\],:]/g;
+  let result = "";
+  let lastIndex = 0;
+  let match = tokenPattern.exec(source);
+
+  while (match) {
+    const token = match[0];
+    const start = match.index;
+    result += escapeHtml(source.slice(lastIndex, start));
+
+    if (token.startsWith("\"")) {
+      const isKey = /^\s*:/.test(source.slice(start + token.length));
+      result += `<span class="${isKey ? "json-token-key" : "json-token-string"}">${escapeHtml(token)}</span>`;
+    } else if (/^-?\d/.test(token)) {
+      result += `<span class="json-token-number">${escapeHtml(token)}</span>`;
+    } else if (token === "true" || token === "false") {
+      result += `<span class="json-token-boolean">${token}</span>`;
+    } else if (token === "null") {
+      result += `<span class="json-token-null">${token}</span>`;
+    } else {
+      result += `<span class="json-token-punct">${escapeHtml(token)}</span>`;
+    }
+
+    lastIndex = start + token.length;
+    match = tokenPattern.exec(source);
+  }
+
+  result += escapeHtml(source.slice(lastIndex));
+  if (!source) return " ";
+  return source.endsWith("\n") ? `${result}\n ` : result;
+}
+
+function JsonLineNumberedTextarea({ value, onChange = () => {}, placeholder, rows = 8, readOnly = false, ariaLabel }) {
+  const [isFocused, setIsFocused] = useState(false);
+  const lineNumbersRef = useRef(null);
+  const highlightRef = useRef(null);
+  const lineNumbers = useMemo(() => {
+    const lineCount = Math.max(1, value.replace(/\r\n/g, "\n").split("\n").length);
+    return Array.from({ length: lineCount }, (_, index) => index + 1);
+  }, [value]);
+  const highlightedMarkup = useMemo(() => highlightJson(value), [value]);
+  const showOverlay = readOnly || !isFocused;
+
+  const syncScroll = (event) => {
+    if (!lineNumbersRef.current) return;
+    const { scrollTop, scrollLeft } = event.currentTarget;
+    lineNumbersRef.current.scrollTop = scrollTop;
+    if (highlightRef.current) {
+      highlightRef.current.scrollTop = scrollTop;
+      highlightRef.current.scrollLeft = scrollLeft;
+    }
+  };
+
+  return (
+    <div className="json-tool-textarea-shell">
+      <div className="json-tool-line-numbers" ref={lineNumbersRef} aria-hidden="true">
+        {lineNumbers.map((line) => (
+          <span key={line}>{line}</span>
+        ))}
+      </div>
+      <div className="json-tool-editor">
+        <pre className={`json-tool-highlight${showOverlay ? "" : " is-hidden"}`} ref={highlightRef} aria-hidden="true">
+          <code dangerouslySetInnerHTML={{ __html: highlightedMarkup }} />
+        </pre>
+        <textarea
+          className={`json-tool-textarea${showOverlay ? " is-overlay-mode" : ""}`}
+          rows={rows}
+          value={value}
+          onChange={onChange}
+          onScroll={syncScroll}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholder={placeholder}
+          readOnly={readOnly}
+          aria-label={ariaLabel}
+          wrap="off"
+          spellCheck={false}
+        />
+      </div>
+    </div>
+  );
 }
 
 export default function JsonToolPage() {
@@ -106,13 +197,14 @@ export default function JsonToolPage() {
 
       <div>
         <h2>Validar e formatar JSON</h2>
-        <textarea
-          rows={8}
+        <JsonLineNumberedTextarea
           value={jsonRaw}
-          onChange={(e) => setJsonRaw(e.target.value)}
+          onChange={(event) => setJsonRaw(event.target.value)}
           placeholder="Cole o JSON aqui"
+          rows={8}
+          ariaLabel="Entrada JSON"
         />
-        <button type="button" onClick={formatRawJson}>
+        <button type="button" className="json-tool-format-button" onClick={formatRawJson}>
           Formatar JSON
         </button>
       </div>
@@ -124,7 +216,13 @@ export default function JsonToolPage() {
             Copiar JSON
           </button>
         </div>
-        <textarea placeholder="O resultado da acao saira aqui" rows={12} value={jsonOutput} readOnly />
+        <JsonLineNumberedTextarea
+          placeholder="O resultado da acao saira aqui"
+          rows={12}
+          value={jsonOutput}
+          readOnly
+          ariaLabel="Resultado JSON"
+        />
       </div>
 
       {statusMessage && <p className="json-tool-message">{statusMessage}</p>}

@@ -2,6 +2,197 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.compare-json-type {
+  max-width: 260px;
+}
+
+.compare-json-type select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.62rem 0.7rem;
+  background: #fff;
+  color: var(--text);
+}
+
+.compare-json-toolbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.compare-json-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.compare-json-format-button {
+  white-space: nowrap;
+}
+
+.compare-json-clear-button {
+  white-space: nowrap;
+  background: #475569;
+}
+
+.compare-json-clear-button:hover {
+  background: #334155;
+}
+
+.compare-json-format-feedback {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.compare-json-format-feedback.is-success {
+  color: var(--success);
+}
+
+.compare-json-format-feedback.is-error {
+  color: var(--danger);
+}
+
+.compare-json-textarea-shell {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.compare-json-textarea-shell:focus-within {
+  outline: 2px solid #38bdf8;
+  outline-offset: 1px;
+}
+
+.compare-json-line-numbers {
+  padding: 0.62rem 0.45rem;
+  background: #f8fafc;
+  border-right: 1px solid var(--border);
+  color: #64748b;
+  text-align: right;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  user-select: none;
+  overflow: hidden;
+}
+
+.compare-json-line-numbers span {
+  display: block;
+}
+
+.compare-json-editor {
+  position: relative;
+  min-width: 0;
+}
+
+.compare-json-highlight,
+.compare-json-textarea-shell .compare-json-textarea {
+  margin: 0;
+  padding: 0.62rem 0.7rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+}
+
+.compare-json-highlight {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--text);
+  background: transparent;
+}
+
+.compare-json-highlight.is-hidden {
+  display: none;
+}
+
+.compare-json-highlight code {
+  display: block;
+  min-height: 100%;
+}
+
+.compare-json-textarea-shell .compare-json-textarea {
+  border: 0;
+  border-radius: 0;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  color: var(--text);
+  caret-color: var(--text);
+  overflow: auto;
+  resize: vertical;
+}
+
+.compare-json-textarea-shell .compare-json-textarea.is-overlay-mode {
+  color: transparent;
+}
+
+.compare-json-textarea-shell .compare-json-textarea::selection {
+  background: rgba(56, 189, 248, 0.26);
+}
+
+.compare-json-textarea-shell .compare-json-textarea::placeholder {
+  color: #94a3b8;
+}
+
+.compare-token-json-key {
+  color: #0f766e;
+}
+
+.compare-token-json-string {
+  color: #b45309;
+}
+
+.compare-token-json-number {
+  color: #1d4ed8;
+}
+
+.compare-token-json-boolean {
+  color: #7c3aed;
+}
+
+.compare-token-json-null {
+  color: #be185d;
+}
+
+.compare-token-json-punct {
+  color: #475569;
+}
+
+.compare-token-html-tag {
+  color: #0369a1;
+}
+
+.compare-token-html-attr {
+  color: #9a3412;
+}
+
+.compare-token-html-value {
+  color: #166534;
+}
+
+.compare-token-html-bracket {
+  color: #475569;
+}
+
+.compare-token-html-comment {
+  color: #64748b;
+  font-style: italic;
+}
+
 .compare-json-diff {
   grid-column: 1 / -1;
   background: var(--surface-2);
@@ -9,9 +200,160 @@
   padding: 0.8rem;
 }
 
-.compare-json-diff ul {
+.compare-json-diff-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.compare-json-summary {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.compare-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.compare-summary-pill.is-changed {
+  background: #e0e7ff;
+  border-color: #c7d2fe;
+  color: #3730a3;
+}
+
+.compare-summary-pill.is-added {
+  background: #dcfce7;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.compare-summary-pill.is-removed {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.compare-json-groups {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.compare-json-group {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.compare-json-group h3 {
   margin: 0;
-  padding-left: 1rem;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.compare-diff-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.compare-diff-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 0.65rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.compare-diff-card.is-changed {
+  border-left-color: #6366f1;
+}
+
+.compare-diff-card.is-added {
+  border-left-color: #16a34a;
+}
+
+.compare-diff-card.is-removed {
+  border-left-color: #dc2626;
+}
+
+.compare-diff-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.compare-diff-chip {
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.compare-diff-chip.is-changed {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.compare-diff-chip.is-added {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.compare-diff-chip.is-removed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.compare-diff-path {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  color: #1e293b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.13rem 0.4rem;
+}
+
+.compare-diff-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.compare-diff-block {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.compare-diff-block small {
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.compare-diff-block pre {
+  margin: 0;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 180px;
+  overflow: auto;
 }
 
 .compare-json-error {
@@ -24,6 +366,10 @@
 
 @media (max-width: 900px) {
   .compare-json-page {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-diff-compare {
     grid-template-columns: 1fr;
   }
 }

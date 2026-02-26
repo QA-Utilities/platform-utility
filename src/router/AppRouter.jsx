@@ -11,7 +11,7 @@ export default function AppRouter() {
     <Routes>
       <Route path="/" element={<FileToolPage />} />
       <Route path="/json" element={<JsonToolPage />} />
-      <Route path="/comparar-json" element={<CompareJsonPage />} />
+      <Route path="/comparar-valor" element={<CompareJsonPage />} />
       <Route path="/comprimir" element={<CompressPage />} />
       <Route path="/base64" element={<Base64Page />} />
       <Route path="/dados-fake" element={<FakeDataPage />} />
