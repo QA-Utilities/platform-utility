@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/pages/fake-data-page.css";
 
 const PERSON_PRESETS = {
@@ -100,6 +100,38 @@ const VEHICLE_PRESETS = {
   }
 };
 
+const COMPANY_PRESETS = {
+  br: {
+    label: "Brasil",
+    prefixes: ["Alfa", "Nova", "Prime", "Global", "Atlas", "Vita", "Sigma"],
+    cores: ["Tecnologia", "Logistica", "Alimentos", "Financeira", "Industrial", "Digital", "Comercio"],
+    suffixes: ["LTDA", "S.A.", "ME", "EIRELI"],
+    streets: ["Avenida Paulista", "Rua XV de Novembro", "Avenida Brasil", "Rua do Comercio"],
+    cities: ["Sao Paulo", "Rio de Janeiro", "Curitiba", "Belo Horizonte", "Recife"],
+    states: ["SP", "RJ", "PR", "MG", "PE"],
+    domains: ["empresa.com.br", "corp.br", "negocio.com.br"]
+  },
+  pt: {
+    label: "Portugal",
+    prefixes: ["Luso", "Atlantica", "Norte", "Iberica", "Fenix", "Porto", "Tagus"],
+    cores: ["Tech", "Servicos", "Comercio", "Industria", "Inovacao", "Logistica"],
+    suffixes: ["LDA", "S.A."],
+    streets: ["Avenida da Liberdade", "Rua do Comercio", "Rua de Santa Catarina", "Rua do Carmo"],
+    cities: ["Lisboa", "Porto", "Braga", "Coimbra", "Faro"],
+    domains: ["empresa.pt", "negocio.pt", "corp.pt"]
+  },
+  us: {
+    label: "EUA",
+    prefixes: ["North", "Blue", "Peak", "Liberty", "Summit", "Golden", "Urban"],
+    cores: ["Systems", "Holdings", "Logistics", "Foods", "Finance", "Technologies"],
+    suffixes: ["LLC", "Inc.", "Corp."],
+    streets: ["Main Street", "Market Street", "Broadway", "Sunset Boulevard"],
+    cities: ["New York", "Austin", "Seattle", "Miami", "Los Angeles"],
+    states: ["NY", "TX", "WA", "FL", "CA"],
+    domains: ["company.us", "corp.com", "enterprise.us"]
+  }
+};
+
 const LABEL_OVERRIDES = {
   nome_completo: "Nome Completo",
   email: "Email",
@@ -127,7 +159,15 @@ const LABEL_OVERRIDES = {
   niss: "NISS",
   cartao_cidadao: "Cartao de Cidadao",
   ssn: "SSN",
-  driver_license: "Driver License"
+  driver_license: "Driver License",
+  nome_empresa: "Nome da Empresa",
+  data_fundacao: "Data de Fundacao",
+  localizacao: "Localizacao",
+  data_abertura: "Data de Abertura",
+  cnpj: "CNPJ / Equivalente",
+  inscricao_estadual: "Inscricao Estadual / Equivalente",
+  tipo_documento_empresa: "Tipo Documento Empresa",
+  tipo_inscricao_estadual: "Tipo Inscricao Estadual"
 };
 
 const VIN_CHARS = "ABCDEFGHJKLMNPRSTUVWXYZ0123456789";
@@ -415,6 +455,149 @@ function buildVehicle(country) {
   };
 }
 
+function formatDateIso(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function randomDateFromYearRange(startYear, endYear) {
+  const year = randomInt(startYear, endYear);
+  const month = randomInt(0, 11);
+  const day = randomInt(1, 28);
+  return new Date(year, month, day);
+}
+
+function addMonths(date, monthsToAdd) {
+  const result = new Date(date.getTime());
+  result.setMonth(result.getMonth() + monthsToAdd);
+  return result;
+}
+
+function buildBrazilCnpj() {
+  const base = [];
+  for (let i = 0; i < 8; i += 1) {
+    base.push(randomInt(0, 9));
+  }
+  base.push(0, 0, 0, 1);
+
+  const weight1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  const weight2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+  let sum = 0;
+  for (let i = 0; i < 12; i += 1) {
+    sum += base[i] * weight1[i];
+  }
+  const check1 = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+
+  const baseWithFirst = [...base, check1];
+  sum = 0;
+  for (let i = 0; i < 13; i += 1) {
+    sum += baseWithFirst[i] * weight2[i];
+  }
+  const check2 = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+
+  const allDigits = `${base.join("")}${check1}${check2}`;
+  return `${allDigits.slice(0, 2)}.${allDigits.slice(2, 5)}.${allDigits.slice(5, 8)}/${allDigits.slice(
+    8,
+    12
+  )}-${allDigits.slice(12)}`;
+}
+
+function buildPortugalNipc() {
+  const base = [5];
+  for (let i = 0; i < 7; i += 1) {
+    base.push(randomInt(0, 9));
+  }
+
+  let sum = 0;
+  for (let i = 0; i < 8; i += 1) {
+    sum += base[i] * (9 - i);
+  }
+  const checkRaw = 11 - (sum % 11);
+  const checkDigit = checkRaw >= 10 ? 0 : checkRaw;
+
+  return `${base.join("")}${checkDigit}`;
+}
+
+function buildUsEin() {
+  return `${randomDigits(2)}-${randomDigits(7)}`;
+}
+
+function buildBrazilStateRegistration() {
+  return randomDigits(12);
+}
+
+function buildPortugalCommercialRegistration() {
+  return `CRC ${randomDigits(8)}`;
+}
+
+function buildUsStateTaxId(state) {
+  return `${state}-${randomDigits(7)}`;
+}
+
+function buildCompany(country) {
+  const preset = COMPANY_PRESETS[country];
+  const prefix = randomItem(preset.prefixes);
+  const core = randomItem(preset.cores);
+  const suffix = randomItem(preset.suffixes);
+  const companyName = `${prefix} ${core} ${suffix}`;
+  const emailToken = normalizeNameForEmail(`${prefix} ${core}`).replace(/\./g, "");
+  const email = `${emailToken || "empresa"}${randomInt(10, 99)}@${randomItem(preset.domains)}`;
+  const foundationDate = randomDateFromYearRange(1975, 2020);
+  const openingDate = addMonths(foundationDate, randomInt(1, 24));
+
+  if (country === "br") {
+    const state = randomItem(preset.states);
+    return {
+      pais: preset.label,
+      nome_empresa: companyName,
+      cnpj: buildBrazilCnpj(),
+      tipo_documento_empresa: "CNPJ",
+      data_fundacao: formatDateIso(foundationDate),
+      localizacao: `${randomItem(preset.streets)}, ${randomInt(10, 9999)} - ${randomItem(preset.cities)}/${state}, Brasil`,
+      data_abertura: formatDateIso(openingDate),
+      inscricao_estadual: buildBrazilStateRegistration(),
+      tipo_inscricao_estadual: "Inscricao Estadual",
+      email
+    };
+  }
+
+  if (country === "pt") {
+    return {
+      pais: preset.label,
+      nome_empresa: companyName,
+      cnpj: buildPortugalNipc(),
+      tipo_documento_empresa: "NIPC (equivalente ao CNPJ)",
+      data_fundacao: formatDateIso(foundationDate),
+      localizacao: `${randomItem(preset.streets)}, ${randomInt(1, 300)}, ${randomDigits(4)}-${randomDigits(
+        3
+      )} ${randomItem(preset.cities)}, Portugal`,
+      data_abertura: formatDateIso(openingDate),
+      inscricao_estadual: buildPortugalCommercialRegistration(),
+      tipo_inscricao_estadual: "Registo Comercial",
+      email
+    };
+  }
+
+  const state = randomItem(preset.states);
+  return {
+    pais: preset.label,
+    nome_empresa: companyName,
+    cnpj: buildUsEin(),
+    tipo_documento_empresa: "EIN (equivalente ao CNPJ)",
+    data_fundacao: formatDateIso(foundationDate),
+    localizacao: `${randomInt(10, 9999)} ${randomItem(preset.streets)}, ${randomItem(
+      preset.cities
+    )}, ${state} ${randomDigits(5)}, USA`,
+    data_abertura: formatDateIso(openingDate),
+    inscricao_estadual: buildUsStateTaxId(state),
+    tipo_inscricao_estadual: "State Tax ID",
+    email
+  };
+}
+
 function formatFieldLabel(key) {
   return key
     .replace(/_/g, " ")
@@ -437,7 +620,7 @@ function toFieldList(value, path = "") {
   return [{ id: path, label, value: String(value ?? "") }];
 }
 
-function DataFields({ fields, emptyMessage }) {
+function DataFields({ fields, emptyMessage, onFieldCopy }) {
   if (fields.length === 0) {
     return <p className="fake-data-empty">{emptyMessage}</p>;
   }
@@ -447,65 +630,124 @@ function DataFields({ fields, emptyMessage }) {
       {fields.map((field, index) => (
         <label className="fake-data-field" key={`${field.id}-${index}`}>
           {field.label}
-          <input type="text" readOnly value={field.value} />
+          <input
+            type="text"
+            readOnly
+            value={field.value}
+            title="Clique para copiar"
+            onClick={(event) => {
+              event.currentTarget.select();
+              onFieldCopy(field);
+            }}
+          />
         </label>
       ))}
     </div>
   );
 }
 
-async function copyToClipboard(content, setMessage, emptyMessage, successMessage) {
+async function copyToClipboard(content, notify, emptyMessage, successMessage) {
   if (!content) {
-    setMessage(emptyMessage);
+    notify(emptyMessage);
     return;
   }
 
   if (!navigator.clipboard) {
-    setMessage("Clipboard indisponivel neste navegador.");
+    notify("Clipboard indisponivel neste navegador.");
     return;
   }
 
   try {
     await navigator.clipboard.writeText(content);
-    setMessage(successMessage);
+    notify(successMessage);
   } catch {
-    setMessage("Nao foi possivel copiar o conteudo.");
+    notify("Nao foi possivel copiar o conteudo.");
+  }
+}
+
+async function copyFieldValue(field, notify) {
+  if (!field?.value) {
+    notify("Campo vazio para copiar.");
+    return;
+  }
+
+  if (!navigator.clipboard) {
+    notify("Clipboard indisponivel neste navegador.");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(field.value);
+    notify(`${field.label} copiado.`);
+  } catch {
+    notify("Nao foi possivel copiar o campo.");
   }
 }
 
 export default function FakeDataPage() {
   const [personCountry, setPersonCountry] = useState("br");
   const [personOutput, setPersonOutput] = useState(null);
-  const [personMessage, setPersonMessage] = useState("");
 
   const [cardBrand, setCardBrand] = useState("visa");
   const [cardOutput, setCardOutput] = useState(null);
-  const [cardMessage, setCardMessage] = useState("");
+
+  const [companyCountry, setCompanyCountry] = useState("br");
+  const [companyOutput, setCompanyOutput] = useState(null);
 
   const [vehicleCountry, setVehicleCountry] = useState("br");
   const [vehicleOutput, setVehicleOutput] = useState(null);
-  const [vehicleMessage, setVehicleMessage] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
+  const toastTimerRef = useRef(null);
+
+  const showToast = (message) => {
+    if (!message) return;
+    setToastMessage(message);
+
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+
+    toastTimerRef.current = window.setTimeout(() => {
+      setToastMessage("");
+      toastTimerRef.current = null;
+    }, 2200);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        window.clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
 
   const personFields = personOutput ? toFieldList(personOutput) : [];
   const cardFields = cardOutput ? toFieldList(cardOutput) : [];
+  const companyFields = companyOutput ? toFieldList(companyOutput) : [];
   const vehicleFields = vehicleOutput ? toFieldList(vehicleOutput) : [];
 
   const generatePerson = () => {
     const data = buildPerson(personCountry);
     setPersonOutput(data);
-    setPersonMessage(`Pessoa fake gerada para ${PERSON_PRESETS[personCountry].label}.`);
+    showToast(`Pessoa fake gerada para ${PERSON_PRESETS[personCountry].label}.`);
   };
 
   const generateCard = () => {
     const data = buildCard(cardBrand);
     setCardOutput(data);
-    setCardMessage(`Cartao ${CARD_BRANDS[cardBrand].label} gerado.`);
+    showToast(`Cartao ${CARD_BRANDS[cardBrand].label} gerado.`);
+  };
+
+  const generateCompany = () => {
+    const data = buildCompany(companyCountry);
+    setCompanyOutput(data);
+    showToast(`Empresa fake gerada para ${COMPANY_PRESETS[companyCountry].label}.`);
   };
 
   const generateVehicle = () => {
     const data = buildVehicle(vehicleCountry);
     setVehicleOutput(data);
-    setVehicleMessage(`Veiculo fake gerado para ${VEHICLE_PRESETS[vehicleCountry].label}.`);
+    showToast(`Veiculo fake gerado para ${VEHICLE_PRESETS[vehicleCountry].label}.`);
   };
 
   return (
@@ -514,6 +756,11 @@ export default function FakeDataPage() {
       <p className="fake-data-intro">
         Gere dados ficticios para testes de cadastro, pagamentos e identificadores de veiculos.
       </p>
+      {toastMessage && (
+        <div className="fake-data-toast" role="status" aria-live="polite">
+          {toastMessage}
+        </div>
+      )}
 
       <div className="fake-data-grid">
         <article className="fake-data-block">
@@ -543,7 +790,7 @@ export default function FakeDataPage() {
               onClick={() =>
                 copyToClipboard(
                   personOutput ? JSON.stringify(personOutput, null, 2) : "",
-                  setPersonMessage,
+                  showToast,
                   "Gere uma pessoa primeiro.",
                   "JSON de pessoa copiado."
                 )
@@ -553,9 +800,11 @@ export default function FakeDataPage() {
               Copiar JSON
             </button>
           </div>
-
-          {personMessage && <p className="fake-data-message">{personMessage}</p>}
-          <DataFields fields={personFields} emptyMessage="Gere uma pessoa para ver os campos separados." />
+          <DataFields
+            fields={personFields}
+            emptyMessage="Gere uma pessoa para ver os campos separados."
+            onFieldCopy={(field) => copyFieldValue(field, showToast)}
+          />
         </article>
 
         <article className="fake-data-block">
@@ -580,7 +829,7 @@ export default function FakeDataPage() {
               onClick={() =>
                 copyToClipboard(
                   cardOutput ? JSON.stringify(cardOutput, null, 2) : "",
-                  setCardMessage,
+                  showToast,
                   "Gere um cartao primeiro.",
                   "JSON do cartao copiado."
                 )
@@ -590,9 +839,11 @@ export default function FakeDataPage() {
               Copiar JSON
             </button>
           </div>
-
-          {cardMessage && <p className="fake-data-message">{cardMessage}</p>}
-          <DataFields fields={cardFields} emptyMessage="Gere um cartao para ver os campos separados." />
+          <DataFields
+            fields={cardFields}
+            emptyMessage="Gere um cartao para ver os campos separados."
+            onFieldCopy={(field) => copyFieldValue(field, showToast)}
+          />
         </article>
 
         <article className="fake-data-block">
@@ -621,7 +872,7 @@ export default function FakeDataPage() {
               onClick={() =>
                 copyToClipboard(
                   vehicleOutput ? JSON.stringify(vehicleOutput, null, 2) : "",
-                  setVehicleMessage,
+                  showToast,
                   "Gere um veiculo primeiro.",
                   "JSON do veiculo copiado."
                 )
@@ -631,9 +882,55 @@ export default function FakeDataPage() {
               Copiar JSON
             </button>
           </div>
+          <DataFields
+            fields={vehicleFields}
+            emptyMessage="Gere um veiculo para ver os campos separados."
+            onFieldCopy={(field) => copyFieldValue(field, showToast)}
+          />
+        </article>
 
-          {vehicleMessage && <p className="fake-data-message">{vehicleMessage}</p>}
-          <DataFields fields={vehicleFields} emptyMessage="Gere um veiculo para ver os campos separados." />
+        <article className="fake-data-block">
+          <h3>Criar empresa</h3>
+          <label>
+            Pais
+            <select value={companyCountry} onChange={(event) => setCompanyCountry(event.target.value)}>
+              {Object.entries(COMPANY_PRESETS).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <p className="fake-data-tip">
+            CNPJ e inscricao estadual sao convertidos para equivalentes locais: NIPC/Registo Comercial (Portugal) e
+            EIN/State Tax ID (EUA).
+          </p>
+
+          <div className="fake-data-actions">
+            <button type="button" onClick={generateCompany}>
+              Gerar empresa
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                copyToClipboard(
+                  companyOutput ? JSON.stringify(companyOutput, null, 2) : "",
+                  showToast,
+                  "Gere uma empresa primeiro.",
+                  "JSON da empresa copiado."
+                )
+              }
+              disabled={!companyOutput}
+            >
+              Copiar JSON
+            </button>
+          </div>
+          <DataFields
+            fields={companyFields}
+            emptyMessage="Gere uma empresa para ver os campos separados."
+            onFieldCopy={(field) => copyFieldValue(field, showToast)}
+          />
         </article>
       </div>
     </section>

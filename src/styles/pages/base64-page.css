@@ -47,3 +47,20 @@
 .base64-output textarea {
   min-height: 14rem;
 }
+
+.base64-reverse {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+}
+
+.base64-reverse p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.base64-reverse textarea {
+  min-height: 10rem;
+}

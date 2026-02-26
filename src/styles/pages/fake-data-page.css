@@ -9,14 +9,16 @@
 
 .fake-data-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.8rem;
+  align-items: start;
 }
 
 .fake-data-block {
   min-width: 0;
   display: grid;
   gap: 0.6rem;
+  align-content: start;
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -45,12 +47,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  align-items: flex-start;
 }
 
-.fake-data-message {
-  margin: 0;
-  color: var(--muted);
-  min-height: 1.2rem;
+.fake-data-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 80;
+  max-width: min(90vw, 360px);
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.35);
 }
 
 .fake-data-empty {
@@ -75,12 +89,7 @@
 .fake-data-field input {
   background: #fff;
   color: #111827;
-}
-
-@media (max-width: 1200px) {
-  .fake-data-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  cursor: copy;
 }
 
 @media (max-width: 900px) {

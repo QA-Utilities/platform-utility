@@ -11,8 +11,7 @@ function tryParseJson(value) {
 
 export default function JsonToolPage() {
   const [pairs, setPairs] = useState([
-    { key: "id", value: "123" },
-    { key: "status", value: "ok" }
+    { key: "", value: "" }
   ]);
   const [jsonRaw, setJsonRaw] = useState('{"hello":"world"}');
   const [jsonOutput, setJsonOutput] = useState("");
@@ -91,7 +90,7 @@ export default function JsonToolPage() {
               onChange={(e) => updatePair(index, "value", e.target.value)}
             />
             <button type="button" onClick={() => removePair(index)}>
-              remover
+              Remover
             </button>
           </div>
         ))}
