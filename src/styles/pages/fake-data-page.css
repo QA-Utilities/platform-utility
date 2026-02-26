@@ -1,0 +1,90 @@
+.fake-data-page {
+  grid-template-columns: 1fr;
+}
+
+.fake-data-intro {
+  margin: 0;
+  color: var(--muted);
+}
+
+.fake-data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.fake-data-block {
+  min-width: 0;
+  display: grid;
+  gap: 0.6rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem;
+}
+
+.fake-data-block h3 {
+  margin: 0;
+}
+
+.fake-data-block select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.62rem 0.7rem;
+  background: #fff;
+}
+
+.fake-data-tip {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.87rem;
+}
+
+.fake-data-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.fake-data-message {
+  margin: 0;
+  color: var(--muted);
+  min-height: 1.2rem;
+}
+
+.fake-data-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.fake-data-fields {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.fake-data-field {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.95rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.fake-data-field input {
+  background: #fff;
+  color: #111827;
+}
+
+@media (max-width: 1200px) {
+  .fake-data-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .fake-data-grid {
+    grid-template-columns: 1fr;
+  }
+}

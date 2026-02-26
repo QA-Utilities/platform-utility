@@ -14,6 +14,13 @@ export const utilities = [
     icon: "{}"
   },
   {
+    id: "fake-data",
+    path: "/dados-fake",
+    label: "Dados Fake",
+    description: "Criar pessoa, cartao e veiculo para testes",
+    icon: "FAKE"
+  },
+  {
     id: "compare",
     path: "/comparar-json",
     label: "Comparar JSON",
