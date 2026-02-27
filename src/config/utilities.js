@@ -14,6 +14,34 @@ export const utilities = [
     icon: "{}"
   },
   {
+    id: "jwt",
+    path: "/jwt",
+    label: "JWT Tool",
+    description: "Decodificar, validar e gerar token JWT HS256",
+    icon: "JWT"
+  },
+  {
+    id: "hash-hmac",
+    path: "/hash-hmac",
+    label: "Hash & HMAC",
+    description: "Gerar hash e HMAC com algoritmos SHA",
+    icon: "HSH"
+  },
+  {
+    id: "mock-api",
+    path: "/mock-api",
+    label: "Mock Request",
+    description: "Popular JSON automaticamente com dados mock",
+    icon: "MOCK"
+  },
+  {
+    id: "webhook",
+    path: "/webhook-simulator",
+    label: "Webhook Simulator",
+    description: "Simular webhook com assinatura, headers e cURL",
+    icon: "WHK"
+  },
+  {
     id: "fake-data",
     path: "/dados-fake",
     label: "Dados Fake",
@@ -26,6 +54,20 @@ export const utilities = [
     label: "Comparar Valores",
     description: "Encontrar mudancas entre respostas",
     icon: "DIFF"
+  },
+  {
+    id: "security-payloads",
+    path: "/security-payloads",
+    label: "Security Payloads",
+    description: "Colecao de payloads SQL Injection e XSS para testes",
+    icon: "SEC"
+  },
+  {
+    id: "test-case-generator",
+    path: "/test-case-generator",
+    label: "Test Case Generator",
+    description: "Analisar regra e gerar casos completos com Gherkin",
+    icon: "TST"
   },
   {
     id: "compress",

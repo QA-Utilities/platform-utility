@@ -1,0 +1,176 @@
+.jwt-tool-page {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.jwt-block {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem;
+}
+
+.jwt-block h2 {
+  margin: 0;
+}
+
+.jwt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.jwt-verify-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.jwt-output-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  align-items: start;
+}
+
+.jwt-output-grid > label {
+  align-self: start;
+  align-content: start;
+}
+
+.jwt-message {
+  margin: 0;
+  color: var(--muted);
+}
+
+.jwt-json-textarea-shell .jwt-json-textarea.is-auto-grow {
+  resize: none;
+  overflow-y: hidden;
+}
+
+.jwt-json-textarea-shell {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.jwt-json-textarea-shell:focus-within {
+  outline: 2px solid #38bdf8;
+  outline-offset: 1px;
+}
+
+.jwt-json-line-numbers {
+  padding: 0.62rem 0.45rem;
+  background: #f8fafc;
+  border-right: 1px solid var(--border);
+  color: #64748b;
+  text-align: right;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  user-select: none;
+  overflow: hidden;
+}
+
+.jwt-json-line-numbers span {
+  display: block;
+}
+
+.jwt-json-editor {
+  position: relative;
+  min-width: 0;
+}
+
+.jwt-json-highlight,
+.jwt-json-textarea-shell .jwt-json-textarea {
+  margin: 0;
+  padding: 0.62rem 0.7rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+}
+
+.jwt-json-highlight {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--text);
+  background: transparent;
+}
+
+.jwt-json-highlight.is-hidden {
+  display: none;
+}
+
+.jwt-json-highlight code {
+  display: block;
+  min-height: 100%;
+}
+
+.jwt-json-textarea-shell .jwt-json-textarea {
+  border: 0;
+  border-radius: 0;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  color: var(--text);
+  caret-color: var(--text);
+  overflow: auto;
+  resize: vertical;
+}
+
+.jwt-json-textarea-shell .jwt-json-textarea.is-overlay-mode {
+  color: transparent;
+}
+
+.jwt-json-textarea-shell .jwt-json-textarea::selection {
+  background: rgba(56, 189, 248, 0.26);
+}
+
+.jwt-json-textarea-shell .jwt-json-textarea::placeholder {
+  color: #94a3b8;
+}
+
+.jwt-token-json-key {
+  color: #0f766e;
+}
+
+.jwt-token-json-string {
+  color: #b45309;
+}
+
+.jwt-token-json-number {
+  color: #1d4ed8;
+}
+
+.jwt-token-json-boolean {
+  color: #7c3aed;
+}
+
+.jwt-token-json-null {
+  color: #be185d;
+}
+
+.jwt-token-json-punct {
+  color: #475569;
+}
+
+@media (max-width: 900px) {
+  .jwt-tool-page {
+    grid-template-columns: 1fr;
+  }
+
+  .jwt-verify-row,
+  .jwt-output-grid {
+    grid-template-columns: 1fr;
+  }
+}

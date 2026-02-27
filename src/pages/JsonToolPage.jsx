@@ -124,12 +124,31 @@ export default function JsonToolPage() {
 
   const generateFromPairs = () => {
     const obj = {};
+    let duplicateCount = 0;
+
     pairs.forEach((pair) => {
       const key = pair.key.trim();
       if (!key) return;
-      obj[key] = pair.value;
+
+      if (!(key in obj)) {
+        obj[key] = pair.value;
+        return;
+      }
+
+      duplicateCount += 1;
+      if (Array.isArray(obj[key])) {
+        obj[key].push(pair.value);
+        return;
+      }
+
+      obj[key] = [obj[key], pair.value];
     });
+
     setJsonOutput(JSON.stringify(obj, null, 2));
+    if (duplicateCount > 0) {
+      setStatusMessage(`JSON gerado. ${duplicateCount} chave(s) repetida(s) foram agrupadas em array.`);
+      return;
+    }
     setStatusMessage("JSON gerado com sucesso.");
   };
 

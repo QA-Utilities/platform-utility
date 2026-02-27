@@ -1,0 +1,116 @@
+.security-payloads-page {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.security-payloads-block {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem;
+}
+
+.security-payloads-block h2 {
+  margin: 0;
+}
+
+.security-payloads-caption {
+  margin: 0;
+  color: var(--muted);
+}
+
+.security-payloads-toolbar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.security-payloads-description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.security-payloads-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.security-payloads-message {
+  margin: 0;
+  color: var(--muted);
+}
+
+.security-payloads-header {
+  color: var(--muted);
+}
+
+.security-payloads-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+.security-payloads-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.security-payloads-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.55rem 0.65rem;
+}
+
+.security-payloads-item code {
+  font-family: "IBM Plex Mono", monospace;
+  color: #0f172a;
+  overflow-wrap: anywhere;
+}
+
+.security-payloads-type {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.13rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.security-payloads-type.is-sqli {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.security-payloads-type.is-xss {
+  background: #e0e7ff;
+  color: #3730a3;
+  border-color: #c7d2fe;
+}
+
+@media (max-width: 900px) {
+  .security-payloads-page {
+    grid-template-columns: 1fr;
+  }
+
+  .security-payloads-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .security-payloads-item {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+}

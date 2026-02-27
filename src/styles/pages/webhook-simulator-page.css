@@ -1,0 +1,74 @@
+.webhook-simulator-page {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.webhook-simulator-block {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem;
+}
+
+.webhook-simulator-block h2 {
+  margin: 0;
+}
+
+.webhook-simulator-caption {
+  margin: 0;
+  color: var(--muted);
+}
+
+.webhook-simulator-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.webhook-simulator-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.webhook-simulator-provider-note {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.webhook-simulator-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.webhook-simulator-message {
+  margin: 0;
+  color: var(--muted);
+}
+
+.webhook-simulator-output {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.webhook-simulator-output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .webhook-simulator-page {
+    grid-template-columns: 1fr;
+  }
+
+  .webhook-simulator-grid {
+    grid-template-columns: 1fr;
+  }
+}
