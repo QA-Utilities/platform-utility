@@ -1,12 +1,17 @@
 import { useState } from "react";
 import QRCode from "qrcode";
+import {
+  QR_DOWNLOAD_FILENAME,
+  QR_RENDER_OPTIONS,
+  QR_TOKEN_ALPHABET,
+  QR_TOKEN_LENGTH
+} from "../config/presets/qrCodeConfigs";
 import "../styles/pages/qrcode-page.css";
 
 function randomToken(length) {
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let value = "";
   for (let i = 0; i < length; i += 1) {
-    value += alphabet[Math.floor(Math.random() * alphabet.length)];
+    value += QR_TOKEN_ALPHABET[Math.floor(Math.random() * QR_TOKEN_ALPHABET.length)];
   }
   return value;
 }
@@ -21,19 +26,11 @@ function buildRandomPayload() {
     String(now.getMinutes()).padStart(2, "0"),
     String(now.getSeconds()).padStart(2, "0")
   ].join("");
-  return `QA-QR-${stamp}-${randomToken(8)}`;
+  return `QA-QR-${stamp}-${randomToken(QR_TOKEN_LENGTH)}`;
 }
 
 async function createQrDataUrl(value) {
-  return QRCode.toDataURL(value, {
-    errorCorrectionLevel: "M",
-    margin: 1,
-    width: 320,
-    color: {
-      dark: "#0f172a",
-      light: "#ffffff"
-    }
-  });
+  return QRCode.toDataURL(value, QR_RENDER_OPTIONS);
 }
 
 function downloadDataUrl(dataUrl, filename) {
@@ -98,7 +95,7 @@ export default function QrCodePage() {
       setStatusMessage("Gere um QR Code antes de baixar.");
       return;
     }
-    downloadDataUrl(qrImageDataUrl, "qrcode-teste.png");
+    downloadDataUrl(qrImageDataUrl, QR_DOWNLOAD_FILENAME);
     setStatusMessage("QR Code baixado.");
   };
 

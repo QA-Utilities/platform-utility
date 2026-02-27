@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { JSON_TOOL_DEFAULT_PAIRS, JSON_TOOL_DEFAULT_RAW } from "../config/presets/jsonToolConfigs";
 import "../styles/pages/json-tool-page.css";
 
 function tryParseJson(value) {
@@ -101,10 +102,8 @@ function JsonLineNumberedTextarea({ value, onChange = () => {}, placeholder, row
 }
 
 export default function JsonToolPage() {
-  const [pairs, setPairs] = useState([
-    { key: "", value: "" }
-  ]);
-  const [jsonRaw, setJsonRaw] = useState('{"hello":"world"}');
+  const [pairs, setPairs] = useState(JSON_TOOL_DEFAULT_PAIRS);
+  const [jsonRaw, setJsonRaw] = useState(JSON_TOOL_DEFAULT_RAW);
   const [jsonOutput, setJsonOutput] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
 
@@ -169,7 +168,7 @@ export default function JsonToolPage() {
       <div>
         <h2>Gerar JSON por campos</h2>
         {pairs.map((pair, index) => (
-          <div className="json-tool-row" key={`${pair.key}-${index}`}>
+          <div className="json-tool-row" key={index}>
             <input
               placeholder="Chave"
               value={pair.key}

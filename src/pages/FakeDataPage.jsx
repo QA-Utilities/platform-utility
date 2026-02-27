@@ -1,22 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  ALPHA_NUM_CHARS,
   CARD_BRANDS,
   COMPANY_PRESETS,
+  GENERATOR_OPTIONS,
   LABEL_OVERRIDES,
+  LETTERS_CHARS,
   PERSON_PRESETS,
+  VIN_CHARS,
   VEHICLE_PRESETS
 } from "../config/presets/fakeDataPresets";
 import "../styles/pages/fake-data-page.css";
-
-const VIN_CHARS = "ABCDEFGHJKLMNPRSTUVWXYZ0123456789";
-const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const ALPHA_NUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-const GENERATOR_OPTIONS = [
-  { value: "person", label: "Criar pessoa" },
-  { value: "card", label: "Criar cartao de credito" },
-  { value: "company", label: "Criar empresa" },
-  { value: "vehicle", label: "Criar veiculo por pais" }
-];
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -37,7 +31,7 @@ function randomDigits(length) {
 function randomLetters(length) {
   let value = "";
   for (let i = 0; i < length; i += 1) {
-    value += LETTERS[randomInt(0, LETTERS.length - 1)];
+    value += LETTERS_CHARS[randomInt(0, LETTERS_CHARS.length - 1)];
   }
   return value;
 }
@@ -45,7 +39,7 @@ function randomLetters(length) {
 function randomAlphaNumeric(length) {
   let value = "";
   for (let i = 0; i < length; i += 1) {
-    value += ALPHA_NUM[randomInt(0, ALPHA_NUM.length - 1)];
+    value += ALPHA_NUM_CHARS[randomInt(0, ALPHA_NUM_CHARS.length - 1)];
   }
   return value;
 }

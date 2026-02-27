@@ -1,20 +1,6 @@
 import { useMemo, useRef, useState } from "react";
+import { COMPARE_TYPES, HTML_VOID_TAGS } from "../config/presets/compareToolConfigs";
 import "../styles/pages/compare-json-page.css";
-
-const COMPARE_TYPES = {
-  json: {
-    label: "JSON",
-    placeholder: "Cole o JSON aqui"
-  },
-  html: {
-    label: "HTML",
-    placeholder: "Cole o HTML aqui"
-  },
-  text: {
-    label: "TEXT",
-    placeholder: "Digite ou cole qualquer texto aqui"
-  }
-};
 
 function tryParseJson(value) {
   try {
@@ -119,22 +105,7 @@ function formatHtmlContent(value) {
   if (!value.trim()) return value;
 
   const tokens = value.match(/<!--[\s\S]*?-->|<![^>]+>|<\/?[A-Za-z][^>]*>|[^<]+/g) || [];
-  const voidTags = new Set([
-    "area",
-    "base",
-    "br",
-    "col",
-    "embed",
-    "hr",
-    "img",
-    "input",
-    "link",
-    "meta",
-    "param",
-    "source",
-    "track",
-    "wbr"
-  ]);
+  const voidTags = new Set(HTML_VOID_TAGS);
 
   let indentLevel = 0;
   const lines = [];
@@ -444,9 +415,11 @@ export default function CompareJsonPage() {
               setFormatFeedback({ type: "", message: "" });
             }}
           >
-            <option value="json">JSON (principal)</option>
-            <option value="html">HTML</option>
-            <option value="text">TEXT</option>
+            {Object.entries(COMPARE_TYPES).map(([key, option]) => (
+              <option key={key} value={key}>
+                {key === "json" ? `${option.label} (principal)` : option.label}
+              </option>
+            ))}
           </select>
         </label>
         <div className="compare-json-toolbar-actions">

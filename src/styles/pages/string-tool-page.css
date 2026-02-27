@@ -1,5 +1,97 @@
 .string-page {
+  grid-template-columns: 1fr;
+}
+
+.string-intro {
+  margin: 0;
+  color: var(--muted);
+}
+
+.string-generator-controls {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.string-generator-select {
+  max-width: 420px;
+}
+
+.string-generator-select select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.62rem 0.7rem;
+  background: #fff;
+}
+
+.string-generator-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.string-selected-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.string-selected-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+  padding: 0.22rem 0.3rem 0.22rem 0.62rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #3730a3;
+}
+
+.string-selected-item button {
+  background: #fff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0.18rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.string-selected-item button:hover {
+  background: #f8fafc;
+}
+
+.string-clear-button {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.string-clear-button:hover {
+  background: #e2e8f0;
+}
+
+.string-grid {
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  align-items: start;
+}
+
+.string-grid.string-grid-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.string-select-hint {
+  margin: 0;
+  padding: 0.85rem 0.95rem;
+  border: 1px dashed #94a3b8;
+  border-radius: 12px;
+  color: #475569;
+  background: #f8fafc;
 }
 
 .string-block {
@@ -164,6 +256,52 @@
   font-size: 0.92rem;
 }
 
+.string-invalid-emails {
+  grid-column: 1 / -1;
+}
+
+.string-invalid-toolbar {
+  display: flex;
+  align-items: end;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.string-invalid-count {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 150px;
+}
+
+.string-invalid-count input {
+  width: 100%;
+}
+
+.string-invalid-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.string-invalid-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 0.6rem 0.7rem;
+}
+
+.string-invalid-item code {
+  font-family: "IBM Plex Mono", monospace;
+  color: #0f172a;
+  word-break: break-all;
+}
+
 .string-occurrence {
   grid-column: 1 / -1;
 }
@@ -185,7 +323,7 @@
 }
 
 @media (max-width: 900px) {
-  .string-page {
+  .string-grid {
     grid-template-columns: 1fr;
   }
 
@@ -194,6 +332,10 @@
   }
 
   .string-password-output {
+    display: grid;
+  }
+
+  .string-invalid-item {
     display: grid;
   }
 }

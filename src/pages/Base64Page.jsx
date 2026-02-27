@@ -1,4 +1,10 @@
 import { useState } from "react";
+import {
+  BINARY_DETECTION_CONFIG,
+  BYTE_SIGNATURES,
+  DEFAULT_RECOVERED_FILENAME,
+  MIME_EXTENSION_MAP
+} from "../config/presets/base64Configs";
 import "../styles/pages/base64-page.css";
 
 function downloadBlob(blob, filename) {
@@ -32,24 +38,7 @@ function fileToDataUrl(file) {
 
 function inferExtensionFromMimeType(mimeType) {
   const normalized = (mimeType || "").toLowerCase();
-  const map = {
-    "text/plain": "txt",
-    "text/html": "html",
-    "application/xml": "xml",
-    "image/svg+xml": "svg",
-    "application/pdf": "pdf",
-    "application/json": "json",
-    "application/zip": "zip",
-    "application/gzip": "gz",
-    "audio/mpeg": "mp3",
-    "audio/wav": "wav",
-    "video/mp4": "mp4",
-    "image/png": "png",
-    "image/jpeg": "jpg",
-    "image/gif": "gif",
-    "image/webp": "webp"
-  };
-  return map[normalized] || "bin";
+  return MIME_EXTENSION_MAP[normalized] || "bin";
 }
 
 function resolveOutputFilename(filename, mimeType) {
@@ -70,7 +59,7 @@ function startsWithBytes(bytes, signature) {
 }
 
 function isLikelyText(bytes) {
-  const sampleSize = Math.min(bytes.length, 1024);
+  const sampleSize = Math.min(bytes.length, BINARY_DETECTION_CONFIG.textSampleSize);
   if (sampleSize === 0) return false;
 
   let suspiciousCount = 0;
@@ -84,18 +73,15 @@ function isLikelyText(bytes) {
     }
   }
 
-  return suspiciousCount / sampleSize < 0.05;
+  return suspiciousCount / sampleSize < BINARY_DETECTION_CONFIG.textSuspiciousThreshold;
 }
 
 function detectMimeTypeFromBytes(bytes) {
-  if (startsWithBytes(bytes, [0x25, 0x50, 0x44, 0x46, 0x2d])) return "application/pdf";
-  if (startsWithBytes(bytes, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) return "image/png";
-  if (startsWithBytes(bytes, [0xff, 0xd8, 0xff])) return "image/jpeg";
-  if (startsWithBytes(bytes, [0x47, 0x49, 0x46, 0x38])) return "image/gif";
-  if (startsWithBytes(bytes, [0x50, 0x4b, 0x03, 0x04])) return "application/zip";
-  if (startsWithBytes(bytes, [0x50, 0x4b, 0x05, 0x06])) return "application/zip";
-  if (startsWithBytes(bytes, [0x50, 0x4b, 0x07, 0x08])) return "application/zip";
-  if (startsWithBytes(bytes, [0x1f, 0x8b])) return "application/gzip";
+  for (const entry of BYTE_SIGNATURES) {
+    if (startsWithBytes(bytes, entry.signature)) {
+      return entry.mime;
+    }
+  }
 
   if (
     bytes.length > 12 &&
@@ -139,7 +125,9 @@ function detectMimeTypeFromBytes(bytes) {
   if (bytes.length > 2 && bytes[0] === 0xff && (bytes[1] & 0xe0) === 0xe0) return "audio/mpeg";
 
   if (isLikelyText(bytes)) {
-    const text = new TextDecoder("utf-8").decode(bytes.slice(0, 2048)).trimStart();
+    const text = new TextDecoder("utf-8")
+      .decode(bytes.slice(0, BINARY_DETECTION_CONFIG.textDecodeBytes))
+      .trimStart();
     const lower = text.toLowerCase();
 
     if (lower.startsWith("{") || lower.startsWith("[")) {
@@ -223,7 +211,7 @@ export default function Base64Page() {
   const [statusMessage, setStatusMessage] = useState("");
   const [includeDataUrl, setIncludeDataUrl] = useState(false);
   const [reverseBase64Input, setReverseBase64Input] = useState("");
-  const [reverseFilename, setReverseFilename] = useState("arquivo-recuperado");
+  const [reverseFilename, setReverseFilename] = useState(DEFAULT_RECOVERED_FILENAME);
   const [reverseMimeType, setReverseMimeType] = useState("");
 
   const handleFileChange = (event) => {

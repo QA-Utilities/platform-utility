@@ -1,3 +1,13 @@
+export const VIN_CHARS = "ABCDEFGHJKLMNPRSTUVWXYZ0123456789";
+export const LETTERS_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+export const ALPHA_NUM_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+export const GENERATOR_OPTIONS = [
+  { value: "person", label: "Criar pessoa" },
+  { value: "card", label: "Criar cartao de credito" },
+  { value: "company", label: "Criar empresa" },
+  { value: "vehicle", label: "Criar veiculo por pais" }
+];
+
 export const PERSON_PRESETS = {
   br: {
     label: "Brasil",

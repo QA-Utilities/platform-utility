@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { COLOR_PICKER_INITIAL_INPUTS, COLOR_PICKER_INITIAL_RGB } from "../config/presets/colorPickerConfigs";
 import "../styles/pages/color-picker-page.css";
 
 function clamp(value, min, max) {
@@ -175,12 +176,12 @@ function cmykToRgb({ c, m, y, k }) {
 }
 
 export default function ColorPickerPage() {
-  const [rgb, setRgb] = useState({ r: 15, g: 118, b: 110 });
-  const [rgbInput, setRgbInput] = useState({ r: "15", g: "118", b: "110" });
-  const [hexInput, setHexInput] = useState("#0F766E");
-  const [hslInput, setHslInput] = useState({ h: "174", s: "77", l: "26" });
-  const [hsvInput, setHsvInput] = useState({ h: "174", s: "87", v: "46" });
-  const [cmykInput, setCmykInput] = useState({ c: "87", m: "0", y: "7", k: "54" });
+  const [rgb, setRgb] = useState({ ...COLOR_PICKER_INITIAL_RGB });
+  const [rgbInput, setRgbInput] = useState({ ...COLOR_PICKER_INITIAL_INPUTS.rgb });
+  const [hexInput, setHexInput] = useState(COLOR_PICKER_INITIAL_INPUTS.hex);
+  const [hslInput, setHslInput] = useState({ ...COLOR_PICKER_INITIAL_INPUTS.hsl });
+  const [hsvInput, setHsvInput] = useState({ ...COLOR_PICKER_INITIAL_INPUTS.hsv });
+  const [cmykInput, setCmykInput] = useState({ ...COLOR_PICKER_INITIAL_INPUTS.cmyk });
   const [statusMessage, setStatusMessage] = useState("");
 
   const currentHex = useMemo(() => rgbToHex(rgb), [rgb]);
